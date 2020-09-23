@@ -551,3 +551,19 @@ def test_nms_is_same():
     assert op1 != op3
     assert op1 != op4
     assert op3 != op4
+
+
+def test_nvof():
+    if is_cuda_available():
+        from megengine.core.tensor import utils
+
+        src_shape = (4, 5, 224, 224, 4)
+        src = np.random.randint(0, 255, src_shape).astype("uint8")
+        src = tensor(src)
+        result = F.nvof(src, precision=1)
+        np.testing.assert_equal(result.shape, np.array((4, 4, 56, 56, 2)))
+        assert result.dtype == np.int16
+        # triger sync to avoid crash
+        a = result.numpy()
+    else:
+        pass

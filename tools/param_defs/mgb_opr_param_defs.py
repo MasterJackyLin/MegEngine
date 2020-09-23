@@ -143,3 +143,5 @@ pdef('PersistentOutputStorage').add_fields(
                ' no branch is taken')
            )
  )
+
+(pdef('NvOf', 'opr Implements NVIDIA Optical Flow SDK.').add_fields('uint32', 'precision', 1))

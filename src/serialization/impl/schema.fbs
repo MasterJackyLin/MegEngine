@@ -100,6 +100,7 @@ union OperatorParam {
     param.Remap = 68,
     param.NMSKeep = 69,
     param.AdaptivePooling = 70,
+    param.NvOf = 71,
 }
 
 table Operator {
