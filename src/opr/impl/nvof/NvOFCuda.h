@@ -41,7 +41,7 @@
             errorLog << "CUDA driver API error " << szErrName;               \
             std::cout << "Exception: " << __FILE__ << ":" << __LINE__ << ":" \
                       << errorLog.str() << std::endl;                        \
-            NVOF_THROW_ERROR(errorLog.str(), NV_OF_ERR_GENERIC);             \
+            mgb_throw(MegBrainError, "CUDA_DRVAPI_CALL ERROR");              \
         }                                                                    \
     } while (0)
 

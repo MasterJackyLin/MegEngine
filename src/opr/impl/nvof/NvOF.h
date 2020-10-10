@@ -35,23 +35,11 @@
 #include <string>
 #include <vector>
 #include "NvOFDefines.h"
+#include "megbrain/common.h"
+#include "megbrain/exception.h"
 #include "nvOpticalFlowCommon.h"
 
-#ifndef NVOF_ENABLE_EXCEPTIONS
-#if __cpp_exceptions || __EXCEPTIONS || \
-        (defined(_MSC_VER) && !defined(__clang__))
-#define NVOF_ENABLE_EXCEPTIONS 1
-#else
-#define NVOF_ENABLE_EXCEPTIONS 0
-#endif
-#endif
-
-#if defined(_MSC_VER)
-#define NVOF_TRAP() __debugbreak()
-#else
-#define NVOF_TRAP() __builtin_trap()
-#endif
-
+using namespace mgb;
 /**
  * @brief Exception class for error reporting from NvOFAPI calls
  */
@@ -63,45 +51,11 @@ public:
     virtual const char* what() const throw() { return m_errorString.c_str(); }
     NV_OF_STATUS getErrorCode() const { return m_errorCode; }
     const std::string& getErrorString() const { return m_errorString; }
-    static NvOFException makeNvOFException(const std::string& errorStr,
-                                           const NV_OF_STATUS errorCode,
-                                           const std::string& functionName,
-                                           const std::string& fileName,
-                                           int lineNo);
 
 private:
     std::string m_errorString;
     NV_OF_STATUS m_errorCode;
 };
-
-inline NvOFException NvOFException::makeNvOFException(
-        const std::string& errorStr, const NV_OF_STATUS errorCode,
-        const std::string& functionName, const std::string& fileName,
-        int lineNo) {
-    std::ostringstream errorLog;
-    errorLog << functionName << " : " << errorStr << " at " << fileName << ";"
-             << lineNo << std::endl;
-    NvOFException exception(errorLog.str(), errorCode);
-    return exception;
-}
-
-#if NVOF_ENABLE_EXCEPTIONS
-#define NVOF_THROW_ERROR(errorStr, errorCode)                           \
-    do {                                                                \
-        throw NvOFException::makeNvOFException(                         \
-                errorStr, errorCode, __FUNCTION__, __FILE__, __LINE__); \
-    } while (0)
-#else
-#define NVOF_THROW_ERROR(errorStr, errorCode)                         \
-    do {                                                              \
-        fprintf(stderr,                                               \
-                "%s: %d: NvOf throw errcode: %d, msg: __FUNCTION__, " \
-                "__LINE__, %s",                                       \
-                errorStr, errorCode);                                 \
-        fflush(stderr);                                               \
-        NVOF_TRAP();                                                  \
-    } while (0)
-#endif
 
 #define NVOF_API_CALL(nvOFAPI)                                               \
     do {                                                                     \
@@ -111,7 +65,7 @@ inline NvOFException NvOFException::makeNvOFException(
             errorLog << #nvOFAPI << "returned error " << errorCode;          \
             std::cout << "Exception: " << __FILE__ << ":" << __LINE__ << ":" \
                       << errorLog.str() << std::endl;                        \
-            NVOF_THROW_ERROR(errorLog.str(), errorCode);                     \
+            mgb_throw(MegBrainError, "NVOF_API_CALL ERROR");                 \
         }                                                                    \
     } while (0)
 

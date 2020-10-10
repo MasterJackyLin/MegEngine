@@ -41,7 +41,9 @@ NvOFCudaAPI::NvOFCudaAPI(CUcontext cuContext, CUstream inputStream, CUstream out
 #endif
     if (!NvOFAPICreateInstanceCuda)
     {
-        NVOF_THROW_ERROR("Cannot find NvOFAPICreateInstanceCuda() entry in NVOF library", NV_OF_ERR_OF_NOT_AVAILABLE);
+        mgb_throw(MegBrainError,
+                  "NVOF: Cannot find NvOFAPICreateInstanceCuda() entry in NVOF "
+                  "library err type: NV_OF_ERR_OF_NOT_AVAILABLE");
     }
 
     m_ofAPI.reset(new NV_OF_CUDA_API_FUNCTION_LIST());

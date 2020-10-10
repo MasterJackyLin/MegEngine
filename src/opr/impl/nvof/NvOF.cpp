@@ -113,7 +113,7 @@ void NvOF::Init(uint32_t nOutGridSize)
     }
     else
     {
-        NVOF_THROW_ERROR("Unsupported OF mode", NV_OF_ERR_INVALID_PARAM);
+        mgb_throw(MegBrainError, "NVOF: Unsupported OF mode err type: NV_OF_ERR_INVALID_PARAM");
     }
 
     memset(&m_outputBufferDesc, 0, sizeof(m_outputBufferDesc));
@@ -193,7 +193,7 @@ NvOF::CreateBuffers(NV_OF_BUFFER_USAGE usage, uint32_t numBuffers)
     }
     else
     {
-        NVOF_THROW_ERROR("Invalid parameter", NV_OF_ERR_GENERIC);
+        mgb_throw(MegBrainError, "NVOF: Invalid parameter err type: NV_OF_ERR_GENERIC");
     }
 
     return ofBuffers;
@@ -217,7 +217,7 @@ NvOF::CreateBuffers(uint32_t nWidth, uint32_t nHeight, NV_OF_BUFFER_USAGE usage,
     }
     else
     {
-        NVOF_THROW_ERROR("Invalid parameter", NV_OF_ERR_GENERIC);
+        mgb_throw(MegBrainError, "NVOF: Invalid parameter err type: NV_OF_ERR_GENERIC");
     }
 
     return ofBuffers;
@@ -236,7 +236,10 @@ void NvOFAPI::LoadNvOFAPI()
 #endif
     if (hModule == NULL)
     {
-        NVOF_THROW_ERROR("NVOF library file not found. Please ensure that the NVIDIA driver is installed", NV_OF_ERR_OF_NOT_AVAILABLE);
+        mgb_throw(
+                MegBrainError,
+                "NVOF: NVOF library file not found. Please ensure that the "
+                "NVIDIA driver is installed type: NV_OF_ERR_OF_NOT_AVAILABLE");
     }
 
     m_hModule = hModule;

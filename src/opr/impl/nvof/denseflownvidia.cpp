@@ -42,7 +42,7 @@ NVFlowExtractor::NVFlowExtractor(int device_id, std::vector<size_t>& shape,
     _preset = preset;
     auto search = preset_map.find(_preset);
     if (search == preset_map.end()) {
-        NVOF_THROW_ERROR("invalid preset level!", NV_OF_ERR_INVALID_PARAM);
+        mgb_throw(MegBrainError, "NVOF: invalid preset level! err type: NV_OF_ERR_INVALID_PARAM");
     }
     perf_preset = search->second;
 }
@@ -107,7 +107,7 @@ void NVFlowExtractor::set_device(int dev_id) {
     if (dev_id < 0 || dev_id >= nGpu) {
         mgb_log_warn("GPU ordinal out of range. Should be with in [0, %d]",
                      nGpu - 1);
-        NVOF_THROW_ERROR("GPU Setting Error!", NV_OF_ERR_GENERIC);
+        mgb_throw(MegBrainError, "NVOF: GPU Setting Error! err type: NV_OF_ERR_GENERIC");
     }
     CUDA_DRVAPI_CALL(cuDeviceGet(&cu_device, dev_id));
 }
@@ -152,7 +152,7 @@ void NVFlowExtractor::extract_flow(unsigned char* frames,
     if ((height != m_height || width != m_width) ||
         (m_temporal_size != temporal_size)) {
         mgb_log_warn("We do not support dynamic shape at mgb side");
-        NVOF_THROW_ERROR("Nvof err shap!!!", NV_OF_ERR_GENERIC);
+        mgb_throw(MegBrainError, "NVOF: Nvof err shap!!!! err type: NV_OF_ERR_GENERIC");
     }
 
     for (size_t batch_idx = 0; batch_idx < batch_size; batch_idx++) {
