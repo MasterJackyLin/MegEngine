@@ -1556,4 +1556,5 @@ def nvof(src: Tensor, precision: int = 1) -> Tensor:
     return apply(op, src)[0]
 
 
-from .loss import *
+from .loss import *  # isort:skip
+from .quantized import conv_bias_activation  # isort:skip
