@@ -1550,3 +1550,6 @@ def nvof(src: Tensor, precision: int = 1) -> Tensor:
 
     op = builtin.NvOf(precision=precision)
     return apply(op, src)[0]
+
+
+from .loss import *
