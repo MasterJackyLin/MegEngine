@@ -517,7 +517,7 @@ def test_nvof():
         src_shape = (4, 5, 224, 224, 4)
         src = np.random.randint(0, 255, src_shape).astype("uint8")
         src = tensor(src)
-        result = F.nvof(src, precision=1)
+        result = F.nn.nvof(src, precision=1)
         np.testing.assert_equal(result.shape, np.array((4, 4, 56, 56, 2)))
         assert result.dtype == np.int16
         # triger sync to avoid crash

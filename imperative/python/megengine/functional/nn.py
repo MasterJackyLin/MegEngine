@@ -58,7 +58,6 @@ __all__ = [
     "softplus",
     "svd",
     "warp_perspective",
-    "nvof",
 ]
 
 
@@ -1544,7 +1543,7 @@ def nvof(src: Tensor, precision: int = 1) -> Tensor:
 
         x = np.random.random_integers(0, 255, (1,2,224,244,4)).astype("uint8")
         src = tensor(x)
-        result = F.nvof(src, precision=1)
+        result = F.nn.nvof(src, precision=1)
         print(result.numpy())
 
     """
